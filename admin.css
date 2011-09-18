@@ -1,0 +1,96 @@
+.group_disabled {
+	display: none;
+}
+
+#post .advanced, #builder_labels {
+	display: none;
+}
+
+#post.advanced .advanced, #post.advanced #builder_labels {
+	display: block;
+}
+
+#custom_fields {
+	margin-bottom: 1em;
+}
+
+#custom_fields .widefat {
+	margin-bottom: 1em;
+}
+
+#custom_fields tbody .controls span {
+	display: none;
+}
+
+#custom_fields tbody tr.hover .controls span {
+	display: inline;
+}
+
+#custom_fields .drag_handle {
+	cursor: move;
+}
+
+#custom_fields tbody .button_update_field {
+	margin-top: 2em;
+	margin-bottom: 1em;
+	text-align: right;
+}
+
+#custom_fields .field_main {
+	margin: 0em 0em;
+	width: 100%;
+}
+
+#custom_fields .field_main td {
+	padding: 0em 1em 0em 0em;
+	border: none;
+}
+
+#custom_fields .field_main input[type="text"], #custom_fields .field_main select {
+	width: 100%;
+}
+
+#custom_fields .button_add_field {
+	text-align: right;
+}
+
+#custom_fields .field_main .field_required p {
+	text-align: center;
+}
+
+#custom_fields .noedit .field_main_edit, #custom_fields .noedit .field_options {
+	display: none;
+}
+
+#custom_fields .edit .field_main_noedit {
+	display: none;
+}
+
+#builder-field-0 {
+	display: none;
+}
+
+#builder-field-none {
+	text-align: center;
+}
+
+#builder-field-none.has_fields {
+	display: none;
+}
+
+#labels {
+	display: block;
+	overflow: hidden;
+	position: relative;
+}
+
+#labels p {
+	display: block;
+	width: 220px;
+	float: left;
+	padding: 0em 1em 0em 0em;
+}
+
+#labels p input {
+	width: 100%;
+}
