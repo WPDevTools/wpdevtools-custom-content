@@ -7,7 +7,7 @@ var WPDT_CustomContent = {
 	init : function () {
 		// Set up the advanced view and toggle switch
 		WPDT_CustomContent.toggle_advanced();
-		jQuery('#show_advanced').click(function () { WPDT_CustomContent.toggle_advanced(); });
+		jQuery('#builder_advanced_advanced').click(function () { WPDT_CustomContent.toggle_advanced(); });
 
 		jQuery('#supports_category').click(function () { jQuery('#category_options').fadeToggle('fast'); });
 		jQuery('#supports_tag').click(function () { jQuery('#tag_options').fadeToggle('fast'); });
@@ -19,7 +19,7 @@ var WPDT_CustomContent = {
 	},
 	
 	toggle_advanced : function () {
-		if (jQuery('#show_advanced:checked').length == 1) {
+		if (jQuery('#builder_advanced_advanced:checked').length == 1) {
 			jQuery('#post').addClass('advanced'); 
 		} else {
 			jQuery('#post').removeClass('advanced'); 
@@ -31,20 +31,20 @@ var WPDT_CustomContent = {
 		singluar = name.singularize().titleize();
 		plural = name.pluralize().titleize();
 		
-		jQuery('#label_name').val(plural);
-		jQuery('#label_singular_name').val(singluar);
-		jQuery('#label_menu_name').val(plural);
-		jQuery('#label_add_new').val('Add New');
-		jQuery('#label_all_items').val('All ' + plural);
-		jQuery('#label_add_new_item').val('Add New ' + singluar);
-		jQuery('#label_edit_item').val('Edit ' + singluar);
-		jQuery('#label_new_item').val('New ' + singluar);
-		jQuery('#label_view_item').val('View ' + singluar);
-		jQuery('#label_search_items').val('Search ' + plural);
-		jQuery('#label_not_found').val('No ' + plural.humanize(true) + ' found');
-		jQuery('#label_not_found_in_trash').val('No ' + plural.humanize(true) + ' found in trash');
-		jQuery('#label_parent_item_colon').val('');
-		jQuery('#label_slug').val(singluar.underscore());
+		jQuery('#builder_labels_name').val(plural);
+		jQuery('#builder_labels_singular_name').val(singluar);
+		jQuery('#builder_labels_menu_name').val(plural);
+		jQuery('#builder_labels_add_new').val('Add New');
+		jQuery('#builder_labels_all_items').val('All ' + plural);
+		jQuery('#builder_labels_add_new_item').val('Add New ' + singluar);
+		jQuery('#builder_labels_edit_item').val('Edit ' + singluar);
+		jQuery('#builder_labels_new_item').val('New ' + singluar);
+		jQuery('#builder_labels_view_item').val('View ' + singluar);
+		jQuery('#builder_labels_search_items').val('Search ' + plural);
+		jQuery('#builder_labels_not_found').val('No ' + plural.humanize(true) + ' found');
+		jQuery('#builder_labels_not_found_in_trash').val('No ' + plural.humanize(true) + ' found in trash');
+		jQuery('#builder_labels_parent_item_colon').val('');
+		jQuery('#builder_slug').val(singluar.underscore());
 	},
 	
 	clone_row : function () {

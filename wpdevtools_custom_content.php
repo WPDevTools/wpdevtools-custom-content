@@ -8,15 +8,16 @@ Version: 0.1
 Author URI: http://wpdevtools.com/
 */
 
+require_once dirname( __FILE__ ) . '/lib/wpdevtools_core/wpdevtools_core.php';
 
 /**
- * WPDT_CustomContent
+ * WPDT_ContentBuilder
  *
  * Core functionality for the Custom Content Builder
  * 
  * @author Christopher Frazier
  */
-class WPDT_ContentBuilder
+class WPDT_ContentBuilder extends WPDT_Core
 {
 
 	/**
@@ -193,25 +194,41 @@ class WPDT_ContentBuilder
 	{
 		global $post;
 		$custom = get_post_custom($post->ID);
+		$settings = unserialize($custom['settings'][0]);
 
 	?>
 		<div class="misc-pub-section">
 			<p><em>Add built-in WordPress features to your content type by checking the options below.</em></p>
-			<p><input type="checkbox" name="builder[supports][]" id="supports_title" value="title"/> <label for="supports_title">Title</label></p>
-			<p><input type="checkbox" name="builder[supports][]" id="supports_editor" value="editor"/> <label for="supports_editor">Visual / HTML editor</label></p>
-			<p><input type="checkbox" name="builder[supports][]" id="supports_excerpt" value="excerpt"/> <label for="supports_excerpt">Optional excerpt editor</label></p>
-			<p><input type="checkbox" name="builder[supports][]" id="supports_thumbnail" value="thumbnail"/> <label for="supports_thumbnail">Featured image selector</label></p>
+		<?php echo self::display_input(array(
+			'type' => 'checkbox', 
+			'name' => 'builder[supports]',
+			'options' => array(
+				'title' => 'Title',
+				'editor' => 'Visual / HTML editor',
+				'excerpt' => 'Optional excerpt editor',
+				'thumbnail' => 'Featured image selector'
+			)), $settings['supports']); ?>
 		</div>
 		<div class="misc-pub-section advanced">
-			<p><input type="checkbox" name="builder[supports][]" id="supports_custom_fields" value="custom-fields"/> <label for="supports_custom_fields">Custom fields</label></p>
-			<p><input type="checkbox" name="builder[supports][]" id="supports_revisions" value="revisions"/> <label for="supports_revisions">Keep track of revisions</label></p>
-			<p><input type="checkbox" name="builder[supports][]" id="supports_page_attributes" value="page-attributes"/> <label for="supports_page_attributes">Show page attributes</label></p>
-			<p><input type="checkbox" name="builder[supports][]" id="supports_post_formats" value="post-formats"/> <label for="supports_post_formats">Show post formats</label></p>
+		<?php echo self::display_input(array(
+			'type' => 'checkbox', 
+			'name' => 'builder[supports]',
+			'options' => array(
+				'custom-fields' => 'User generated custom fields',
+				'revisions' => 'Keep track of revisions',
+				'page-attributes' => 'Show page attributes',
+				'post-formats' => 'Show post formats'
+			)), $settings['supports']); ?>
 		</div>
 		<div class="misc-pub-section misc-pub-section-last">
-			<p><input type="checkbox" name="builder[supports][]" id="supports_comments" value="comments"/> <label for="supports_comments">Comments</label></p>
-			<p class="advanced"><input type="checkbox" name="builder[supports][]" id="supports_trackbacks" value="trackbacks"/> <label for="supports_trackbacks">Trackbacks</label></p>
-			<p><input type="checkbox" name="builder[supports][]" id="supports_author" value="author"/> <label for="supports_author">Author selection</label></p>
+		<?php echo self::display_input(array(
+			'type' => 'checkbox', 
+			'name' => 'builder[supports]',
+			'options' => array(
+				'comments' => 'Comments',
+				'trackbacks' => 'Trackbacks',
+				'author' => 'Author selection'
+			)), $settings['supports']); ?>
 		</div>
 	<?php
 	
@@ -226,19 +243,17 @@ class WPDT_ContentBuilder
 	{
 		global $post;
 		$custom = get_post_custom($post->ID);
+		$settings = unserialize($custom['settings'][0]);
 
 	?>
 		<div class="misc-pub-section misc-pub-section-last">
-			<p><input type="checkbox" name="builder[category][enable]" id="supports_category" value="true"/> <label for="supports_category">Enable custom categories</label></p>
-			<div id="category_options" class="group_disabled">
-				<p><label for="category_name">Category Name</label><br><input type="text" id="category_name" name="builder[category][name]" value="" /></p>
-				<p class="advanced"><label for="category_singular_name">Category Singular Form</label><br><input type="text" id="category_singular_name" name="builder[category][name_singular]" value="" /></p>
-			</div>
-			<p><input type="checkbox" name="builder[tag][enable]" id="supports_tag" value="true"/> <label for="supports_tag">Enable custom tags</label></p>
-			<div id="tag_options" class="group_disabled">
-				<p><label for="tag_name">Tag Name</label><br><input type="text" id="tag_name" name="builder[tag][name]" value="" /></p>
-				<p class="advanced"><label for="tag_singular_name">Tag Singular Form</label><br><input type="text" id="tag_singular_name" name="builder[tag][name_singular]" value="" /></p>
-			</div>
+			<?php echo self::display_input(array('type' => 'checkbox', 'name' => 'builder[category]','options' => array('enable_categories' => 'Enable custom categories')), $settings['category']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[category][name]','label' => 'Category Name'), $settings['category']['name']); ?>
+			<?php echo self::display_input(array('class' => 'advanced', 'label_order' => 'before', 'name' => 'builder[category][name_singular]','label' => 'Category Singular Form'), $settings['category']['name_singular']); ?>
+			
+			<?php echo self::display_input(array('type' => 'checkbox', 'name' => 'builder[tag]','options' => array('enable_tags' => 'Enable custom tags')), $settings['tag']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[tag][name]','label' => 'Tag Name'), $settings['tag']['name']); ?>
+			<?php echo self::display_input(array('class' => 'advanced', 'label_order' => 'before', 'name' => 'builder[tag][name_singular]','label' => 'Tag Singular Form'), $settings['tag']['name_singular']); ?>
 		</div>
 	<?php
 	
@@ -264,25 +279,28 @@ class WPDT_ContentBuilder
 	public function show_label_meta()
 	{
 		global $post;
+		$custom = get_post_custom($post->ID);
+		$settings = unserialize($custom['settings'][0]);
 
 	?>
 		<p>The custom content plugin will attempt to automatically set your label names for you, however you can also edit them once they have been set.  If you edit the title of the content type, <strong>these fields will be reset</strong>.</p>
 		<div id="labels">
-			<p><label for="label_name">Name</label><br><input type="text" id="label_name" name="builder[labels][name]" value="" /></p>
-			<p><label for="label_singular_name">Singular Name</label><br><input type="text" id="label_singular_name" name="builder[labels][singular_name]" value="" /></p>
-			<p><label for="label_add_new">Add New</label><br><input type="text" id="label_add_new" name="builder[labels][add_new]" value="" /></p>
-			<p><label for="label_all_items">All Item</label><br><input type="text" id="label_all_items" name="builder[labels][all_items]" value="" /></p>
-			<p><label for="label_add_new_item">Add New Item</label><br><input type="text" id="label_add_new_item" name="builder[labels][add_new_item]" value="" /></p>
-			<p><label for="label_edit_item">Edit Item</label><br><input type="text" id="label_edit_item" name="builder[labels][edit_item]" value="" /></p>
-			<p><label for="label_new_item">New Item</label><br><input type="text" id="label_new_item" name="builder[labels][new_item]" value="" /></p>
-			<p><label for="label_view_item">View Item</label><br><input type="text" id="label_view_item" name="builder[labels][view_item]" value="" /></p>
-			<p><label for="label_search_items">Search Items</label><br><input type="text" id="label_search_items" name="builder[labels][search_items]" value="" /></p>
-			<p><label for="label_not_found">Not Found</label><br><input type="text" id="label_not_found" name="builder[labels][not_found]" value="" /></p>
-			<p><label for="label_not_found_in_trash">Not Found in Trash</label><br><input type="text" id="label_not_found_in_trash" name="builder[labels][not_found_in_trash]" value="" /></p>
-			<p><label for="label_parent_item_colon">Parent Item Colon</label><br><input type="text" id="label_parent_item_colon" name="builder[labels][parent_item_colon]" value="" /></p>
-			<p><label for="label_menu_name">Menu Name</label><br><input type="text" id="label_menu_name" name="builder[labels][menu_name]" value="" /></p>
-			<p><label for="label_slug">Item Slug</label><br><input type="text" id="label_slug" name="builder[slug]" value="" /></p>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][name]','label' => 'Name'), $settings['labels']['name']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][singular_name]','label' => 'Singular Name'), $settings['labels']['singular_name']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][add_new]','label' => 'Add New'), $settings['labels']['add_new']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][all_items]','label' => 'All Item'), $settings['labels']['all_items']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][add_new_item]','label' => 'Add New Item'), $settings['labels']['add_new_item']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][edit_item]','label' => 'Edit Item'), $settings['labels']['edit_item']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][new_item]','label' => 'New Item'), $settings['labels']['new_item']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][view_item]','label' => 'View Item'), $settings['labels']['view_item']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][search_items]','label' => 'Search Items'), $settings['labels']['search_items']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][not_found]','label' => 'Not Found'), $settings['labels']['not_found']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][not_found_in_trash]','label' => 'Not Found in Trash'), $settings['labels']['not_found_in_trash']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][parent_item_colon]','label' => 'Parent Item Colon'), $settings['labels']['parent_item_colon']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[labels][menu_name]','label' => 'Menu Name'), $settings['labels']['menu_name']); ?>
+			<?php echo self::display_input(array('label_order' => 'before', 'name' => 'builder[slug]','label' => 'Item Slug'), $settings['slug']); ?>
 		</div>
+
 	
 	<?php
 	}
@@ -298,10 +316,11 @@ class WPDT_ContentBuilder
 
 		global $post;
 		$custom = get_post_custom($post->ID);
+		$settings = unserialize($custom['settings'][0]);
 
 	?>
 		<div class="misc-pub-section  misc-pub-section-last">
-			<p><input type="checkbox" name="builder[advanced]" id="show_advanced" value="Show Advanced"/> <label for="show_advanced">Show Advanced Settings</label></p>
+			<?php echo self::display_input(array('type' => 'checkbox', 'name' => 'builder[advanced]','options' => array('advanced' => 'Show Advanced Settings')), $settings['advanced']); ?>
 		</div>
 	<?php
 	
@@ -413,8 +432,7 @@ class WPDT_ContentBuilder
 
 			if (get_post_type($post->ID) == 'content_builder') {
 				$settings = $_POST['builder'];
-				echo '<pre>'; print_r ($_POST['builder']); echo '</pre>';
-				die();
+				update_post_meta($post->ID, "settings", $settings);
 			}
 		}
 
