@@ -8,7 +8,7 @@ Version: 0.1
 Author URI: http://wpdevtools.com/
 */
 
-require_once dirname( __FILE__ ) . '/lib/wpdevtools_core/wpdevtools_core.php';
+require_once dirname( __FILE__ ) . '/lib/wpdevtools-core/wpdevtools-core.php';
 
 /**
  * WPDT_ContentBuilder
